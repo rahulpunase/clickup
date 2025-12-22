@@ -1,18 +1,29 @@
 import { Button as Root } from '@base-ui/react/button';
 import { buttonVariant } from "./variants";
+import { VariantProps } from 'tailwind-variants';
+
+type ButtonVariants = VariantProps<typeof buttonVariant>;
+
 
 type ButtonProps = {
-    color?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark";
-    size?: "sm" | "md" | "lg";
-    variant?: "outline" | "ghost" | "link";
-}
+  size: ButtonVariants['size'];
+  variant: ButtonVariants['variant'];
+  color: ButtonVariants['color'];
+} & React.ButtonHTMLAttributes<HTMLButtonElement> & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const Button = ({color, size, variant}: ButtonProps) => {
+const Button = ({ size = 'md', variant = 'solid', color = 'primary', children, href, ...props }: ButtonProps) => {
+  if (href) {
+    return (
+      <a href={href} className={buttonVariant({ size, variant, color })} {...props}>
+        {children}
+      </a>
+    )
+  }
   return (
-    <Root className={buttonVariant({color, size, variant})}>
-        content
+    <Root className={buttonVariant({ size, variant, color })} {...props}>
+      {children}
     </Root>
   )
 }
 
-export {Button}
+export { Button }
