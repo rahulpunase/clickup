@@ -30,6 +30,10 @@ const meta = {
       control: 'radio',
       options: ['primary', 'secondary', 'danger', 'success', 'warning'],
     },
+    icon: {
+      control: 'radio',
+      options: ['activity', 'user', 'app-window'],
+    },
   },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
   args: { onClick: fn() },
@@ -111,7 +115,38 @@ export const Variants: Story = {
   </div>,
 };
 
+export const WithIcons: Story = {
+  args: {
+    size: "lg",
+    variant: "solid",
+    color: "primary",
+    icon: "activity",
+  },
+  render: (args) => <div className="flex gap-2 flex-col">
+    <div className="flex flex-row gap-2 items-center justify-center">
+      <Button {...args} icon="activity" size="sm">Activity</Button>
+      <Button {...args} icon="user" size="sm">User</Button>
+      <Button {...args} icon="app-window" size="sm">App Window</Button>
+    </div>
+    <div className="flex flex-row gap-2 items-center justify-center">
+      <Button {...args} icon="activity" size="md">Activity</Button>
+      <Button {...args} icon="user" size="md">User</Button>
+      <Button {...args} icon="app-window" size="md">App Window</Button>
+    </div>
+    <div className="flex flex-row gap-2 items-center justify-center">
+      <Button {...args} icon="activity" size="lg">Activity</Button>
+      <Button {...args} icon="user" size="lg">User</Button>
+      <Button {...args} icon="app-window" size="lg">App Window</Button>
+    </div>
+  </div>,
+}
+
 export const All: Story = {
+  args: {
+    size: "lg",
+    variant: "solid",
+    color: "primary",
+  },
   render: (args) => <div className="flex gap-4 flex-col">
     <div className='flex flex-row gap-4'>
       <Button {...args} color="primary">Primary</Button>

@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 const buttonVariant = tv({
-    base: "rounded-md px-4 py-2 shadow-sm text-sm flex items-center justify-center cursor-pointer box-border transition-all duration-100 ease-in-out",
+    base: "rounded-md px-2 shadow-sm text-sm flex items-center justify-center cursor-pointer box-border transition-all duration-100 ease-in-out",
     variants: {
         size: {
             sm: "text-xs h-6",
@@ -17,7 +17,7 @@ const buttonVariant = tv({
         },
         variant: {
             solid: "bg-none",
-            outline: "shadow-none border",
+            outline: "shadow-none border-t-[1px] border-s-[1px] border-e-[1px] border-b-[1px]",
             ghost: "shadow-none",
             link: "shadow-none hover:underline"
         }
