@@ -3,7 +3,8 @@ import { cx, tv } from 'tailwind-variants';
 const buttonVariant = tv({
   base: cx(
     // base
-    'rounded-md px-2 shadow-sm text-sm flex items-center justify-center cursor-pointer box-border transition-all duration-100 ease-in-out',
+    'rounded-2xl px-3 text-sm flex items-center justify-center cursor-pointer box-border',
+    'transition-all duration-100 ease-in-out',
     // disabled
     'disabled:opacity-50 disabled:cursor-not-allowed',
     // aria-expanded
@@ -15,7 +16,7 @@ const buttonVariant = tv({
     size: {
       sm: 'text-xs h-6',
       md: 'text-sm h-7',
-      lg: 'text-base h-8',
+      lg: 'text-sm h-8',
     },
     color: {
       primary: '',

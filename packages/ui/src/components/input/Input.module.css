@@ -1,0 +1,27 @@
+.root {
+  position: relative;
+  .icon {
+    position: absolute;
+    left: 0px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    padding: 0 calc(var(--spacing) * 2);
+  }
+
+  .actions {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    padding: 0 calc(var(--spacing) * 2);
+    gap: calc(var(--spacing) * 2);
+  }
+}

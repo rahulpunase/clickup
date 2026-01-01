@@ -1,9 +1,10 @@
 import { Button as Root } from '@base-ui/react/button';
-import { buttonVariant } from './variants';
-import { VariantProps, cn } from 'tailwind-variants';
-import { ComponentProps } from 'react';
 import { DynamicIcon } from 'lucide-react/dynamic';
+import { ComponentProps } from 'react';
+import { cn, VariantProps } from 'tailwind-variants';
+
 import { Icon } from '../icon/Icon';
+import { buttonVariant } from './variants';
 
 type ButtonVariants = VariantProps<typeof buttonVariant>;
 
