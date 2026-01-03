@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 import { cn, VariantProps } from 'tailwind-variants';
 
 import { Icon } from '../icon/Icon';
-import { buttonVariant } from './variants';
+import { buttonVariant } from './Button.Variants';
 
 type ButtonVariants = VariantProps<typeof buttonVariant>;
 
