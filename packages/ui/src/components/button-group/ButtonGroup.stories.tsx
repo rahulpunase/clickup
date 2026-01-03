@@ -1,13 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-
 import { fn } from 'storybook/test';
 
-import { ButtonGroup } from './ButtonGroup';
 import { Button } from '../button/Button';
+import { ButtonGroup } from './ButtonGroup';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'Design System/Button Group',
+  title: 'Components/Button Group',
   component: ButtonGroup,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout

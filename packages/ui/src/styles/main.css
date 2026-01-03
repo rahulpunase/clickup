@@ -1,5 +1,20 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-body {
-    @apply text-gray-800;
+:root,
+html[data-theme='light'] {
+  @apply text-gray-800;
+}
+
+@theme {
+  --color-background: rgba(255, 255, 255, 1);
+}
+
+:root,
+html[data-theme='light'] {
+  --color-background: rgba(255, 255, 255, 1);
+}
+
+:root,
+html[data-theme='dark'] {
+  --color-background: rgba(0, 0, 0, 1);
 }

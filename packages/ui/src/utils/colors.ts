@@ -6,4 +6,7 @@ export const colors = {
     active: 'border-blue-300',
     disabled: 'border-gray-200',
   },
+  background: {
+    main: 'bg-white',
+  },
 };

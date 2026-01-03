@@ -65,7 +65,7 @@ const Content = ({ children, sideOffset = 8, ...props }: ContentProps) => {
       <Menu.Positioner
         {...props}
         sideOffset={sideOffset}
-        className="bg-white rounded-md shadow-lg py-2 px-1 border border-gray-200 max-w-72 "
+        className="bg-background rounded-md shadow-lg py-2 px-1 border border-gray-200 max-w-72 "
       >
         <Menu.Popup>
           {header && <div className="pr-2 pl-2">{header}</div>}
