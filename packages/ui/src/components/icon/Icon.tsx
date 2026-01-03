@@ -21,16 +21,20 @@ const iconVariants = tv({
 type IconProps = {
   icon: IconName;
   size?: VariantProps<typeof iconVariants>['size'];
+  className?: string;
 };
 
 /**
  * Icon component
  * @param icon - Icon name
  * @param size - Icon size
+ * @param className - Additional class names
  * @returns Icon component
  */
-const Icon = ({ icon, size = 'md' }: IconProps) => {
-  return <DynamicIcon name={icon} className={iconVariants({ size })} />;
+const Icon = ({ icon, size = 'md', className }: IconProps) => {
+  return (
+    <DynamicIcon name={icon} className={iconVariants({ size, className })} />
+  );
 };
 
 export { Icon };

@@ -1,12 +1,454 @@
 # Antigravity Design System Guidelines
 
 ## Table of Contents
-1. [Project Structure](#project-structure)
-2. [Component Development Guidelines](#component-development-guidelines)
-3. [Storybook Guidelines](#storybook-guidelines)
-4. [Playwright Testing Guidelines](#playwright-testing-guidelines)
-5. [Design Tokens](#design-tokens)
-6. [Accessibility Standards](#accessibility-standards)
+1. [Using These Guidelines in Antigravity](#using-these-guidelines-in-antigravity)
+2. [Project Structure](#project-structure)
+3. [Component Development Guidelines](#component-development-guidelines)
+4. [Storybook Guidelines](#storybook-guidelines)
+5. [Playwright Testing Guidelines](#playwright-testing-guidelines)
+6. [Design Tokens (CSS Variables)](#design-tokens)
+7. [Accessibility Standards](#accessibility-standards)
+
+---
+
+## Using These Guidelines in Antigravity
+
+### 1. AI-Assisted Component Development
+
+When working in Antigravity, you can reference these guidelines to create components. Here's how:
+
+#### Creating a New Component
+
+**Prompt Example:**
+```
+Create a new compound component called "Accordion" following the Antigravity design system guidelines:
+- Use Base UI for accessibility
+- Use tailwind-variants with slots pattern
+- Create AccordionItem, AccordionTrigger, AccordionContent sub-components
+- Include variants for size (sm, md, lg) and style (default, bordered)
+- Follow the compound component pattern with Context
+```
+
+#### Updating an Existing Component
+
+**Prompt Example:**
+```
+Update the Button component to add a new "loading" state:
+- Add loading variant to buttonVariants
+- Show a spinner icon when loading
+- Disable interaction when loading
+- Update Storybook stories to show loading state
+- Add Playwright tests for loading behavior
+```
+
+#### Creating Storybook Stories
+
+**Prompt Example:**
+```
+Create Storybook stories for the Card component following the guidelines:
+- Default story with all sub-components
+- Variants story showing default, outline, ghost
+- Composition stories (with/without header, footer)
+- Interactive story with stateful behavior
+- Complex composition with nested components
+```
+
+#### Writing Playwright Tests
+
+**Prompt Example:**
+```
+Write Playwright tests for the Dialog component:
+- Test rendering and visibility
+- Test opening/closing behavior
+- Test keyboard navigation (Tab, Escape)
+- Test focus management (trap focus, restore on close)
+- Test accessibility (ARIA attributes)
+- Test with different viewport sizes
+```
+
+### 2. Code Snippets and Templates
+
+Use these snippets in Antigravity for faster development:
+
+#### Snippet: New Compound Component
+
+**Trigger:** `@component-compound`
+
+```tsx
+// ComponentName.variants.ts
+import { tv } from 'tailwind-variants';
+
+export const componentNameVariants = tv({
+  slots: {
+    root: 'base-root-classes',
+    subComponent: 'base-sub-classes',
+  },
+  variants: {
+    variant: {
+      default: { root: 'default-classes' },
+      // Add more variants
+    },
+    size: {
+      sm: { root: 'small-classes' },
+      md: { root: 'medium-classes' },
+      lg: { root: 'large-classes' },
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'md',
+  },
+});
+
+// ComponentName.tsx
+import * as React from 'react';
+import { type VariantProps } from 'tailwind-variants';
+import { componentNameVariants } from './ComponentName.variants';
+
+const ComponentNameContext = React.createContext<VariantProps<typeof componentNameVariants>>({});
+
+interface ComponentNameRootProps 
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof componentNameVariants> {}
+
+const ComponentNameRoot = React.forwardRef<HTMLDivElement, ComponentNameRootProps>(
+  ({ variant, size, className, children, ...props }, ref) => {
+    const variantProps = { variant, size };
+    const styles = componentNameVariants(variantProps);
+    
+    return (
+      <ComponentNameContext.Provider value={variantProps}>
+        <div
+          ref={ref}
+          className={styles.root({ className })}
+          {...props}
+        >
+          {children}
+        </div>
+      </ComponentNameContext.Provider>
+    );
+  }
+);
+ComponentNameRoot.displayName = 'ComponentName';
+
+interface ComponentNameSubProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const ComponentNameSub = React.forwardRef<HTMLDivElement, ComponentNameSubProps>(
+  ({ className, ...props }, ref) => {
+    const variantProps = React.useContext(ComponentNameContext);
+    const styles = componentNameVariants(variantProps);
+    
+    return (
+      <div
+        ref={ref}
+        className={styles.subComponent({ className })}
+        {...props}
+      />
+    );
+  }
+);
+ComponentNameSub.displayName = 'ComponentNameSub';
+
+export const ComponentName = Object.assign(ComponentNameRoot, {
+  Sub: ComponentNameSub,
+});
+```
+
+#### Snippet: Simple Component with Base UI
+
+**Trigger:** `@component-simple`
+
+```tsx
+// ComponentName.variants.ts
+import { tv } from 'tailwind-variants';
+
+export const componentNameVariants = tv({
+  base: 'base-classes',
+  variants: {
+    variant: {
+      default: 'variant-classes',
+    },
+    size: {
+      sm: 'size-small',
+      md: 'size-medium',
+      lg: 'size-large',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'md',
+  },
+});
+
+// ComponentName.tsx
+import * as BaseComponent from '@base-ui/react/Component';
+import { type VariantProps } from 'tailwind-variants';
+import { componentNameVariants } from './ComponentName.variants';
+
+interface ComponentNameProps 
+  extends BaseComponent.ComponentProps,
+    VariantProps<typeof componentNameVariants> {}
+
+export const ComponentName = React.forwardRef<HTMLElement, ComponentNameProps>(
+  ({ variant, size, className, ...props }, ref) => {
+    return (
+      <BaseComponent.Root
+        ref={ref}
+        className={componentNameVariants({ variant, size, className })}
+        {...props}
+      />
+    );
+  }
+);
+ComponentName.displayName = 'ComponentName';
+```
+
+#### Snippet: Storybook Story
+
+**Trigger:** `@story-compound`
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { ComponentName } from './ComponentName';
+
+const meta: Meta<typeof ComponentName> = {
+  title: 'Components/ComponentName',
+  component: ComponentName,
+  tags: ['autodocs'],
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['default', 'outline'],
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof ComponentName>;
+
+export const Default: Story = {
+  render: (args) => (
+    <ComponentName {...args}>
+      <ComponentName.Sub>Content</ComponentName.Sub>
+    </ComponentName>
+  ),
+  args: {
+    variant: 'default',
+    size: 'md',
+  },
+};
+
+export const Variants: Story = {
+  render: () => (
+    <div className="flex gap-4">
+      <ComponentName variant="default">
+        <ComponentName.Sub>Default</ComponentName.Sub>
+      </ComponentName>
+      <ComponentName variant="outline">
+        <ComponentName.Sub>Outline</ComponentName.Sub>
+      </ComponentName>
+    </div>
+  ),
+};
+```
+
+#### Snippet: Playwright Test
+
+**Trigger:** `@test-component`
+
+```tsx
+import { test, expect } from '@playwright/test';
+
+test.describe('ComponentName', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:6006/iframe.html?id=components-componentname--default');
+  });
+
+  test('should render correctly', async ({ page }) => {
+    const component = page.locator('[data-testid="component-name"]');
+    await expect(component).toBeVisible();
+  });
+
+  test('should handle user interactions', async ({ page }) => {
+    const component = page.locator('[data-testid="component-name"]');
+    await component.click();
+    // Add assertions
+  });
+
+  test('should be keyboard accessible', async ({ page }) => {
+    await page.keyboard.press('Tab');
+    const component = page.locator('[data-testid="component-name"]');
+    await expect(component).toBeFocused();
+  });
+});
+```
+
+### 3. AI Chat Context
+
+When asking Antigravity's AI for help, provide context like:
+
+**Good Prompt:**
+```
+Following the Antigravity design system guidelines, help me refactor this Button component to use tailwind-variants instead of the cn() utility with conditional classes.
+
+Current implementation:
+[paste your code]
+
+Requirements:
+- Move all variants to Button.variants.ts
+- Keep the same visual appearance
+- Maintain all existing props
+- Update TypeScript types
+```
+
+**Good Prompt:**
+```
+I need to add a "Tabs" compound component to our design system. It should:
+- Follow our compound component pattern
+- Use Base UI Tabs for behavior
+- Have TabsList, TabsTrigger, TabsContent sub-components
+- Support variant: default, pills, underline
+- Support size: sm, md, lg
+- Include proper ARIA attributes
+- Create complete Storybook stories
+```
+
+### 4. Linting and Validation
+
+Configure ESLint rules in Antigravity to enforce guidelines:
+
+```json
+// .eslintrc.json in ui package
+{
+  "rules": {
+    // Enforce display names
+    "react/display-name": "error",
+    
+    // Enforce prop types
+    "@typescript-eslint/explicit-module-boundary-types": "warn",
+    
+    // Warn on missing accessibility attributes
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn"
+  }
+}
+```
+
+### 5. Quick Reference Commands
+
+In Antigravity terminal:
+
+```bash
+# Generate new component scaffolding
+pnpm turbo gen component
+
+# Run Storybook
+cd packages/ui && pnpm storybook
+
+# Run Playwright tests
+cd packages/ui && pnpm test:e2e
+
+# Run specific test file
+pnpm test:e2e Card.spec.ts
+
+# Build the UI package
+pnpm turbo build --filter=ui
+
+# Lint the UI package
+pnpm turbo lint --filter=ui
+```
+
+### 6. Component Checklist in Antigravity
+
+Before committing, use this checklist in your PR template:
+
+```markdown
+## Component Checklist
+
+- [ ] Follows compound component pattern (if applicable)
+- [ ] Uses tailwind-variants for styling
+- [ ] Uses Base UI for behavior
+- [ ] TypeScript types exported
+- [ ] All variants implemented
+- [ ] Context shares variants (for compound components)
+- [ ] Forward refs on all components
+- [ ] Display names set
+- [ ] Responsive design verified
+- [ ] Dark mode works
+- [ ] Keyboard navigation tested
+- [ ] Storybook stories created
+- [ ] Playwright tests passing
+- [ ] Documentation complete
+- [ ] Peer reviewed
+```
+
+### 7. File Organization in Antigravity
+
+Your Antigravity workspace structure:
+
+```
+antigravity-workspace/
+├── apps/
+│   ├── web/           # Main application
+│   └── docs/          # Documentation site
+├── packages/
+│   └── ui/            # Design system (THIS IS WHERE YOU WORK)
+│       ├── src/
+│       │   ├── components/
+│       │   │   ├── Button/
+│       │   │   │   ├── Button.tsx
+│       │   │   │   ├── Button.variants.ts
+│       │   │   │   ├── Button.stories.tsx
+│       │   │   │   ├── Button.test.tsx
+│       │   │   │   └── index.ts
+│       │   │   └── ...
+│       │   ├── tokens/ 
+│       │   └── utils/
+│       │       └── utils.ts
+│       ├── tests/
+│       │   └── e2e/
+│       ├── .storybook/
+│       ├── playwright.config.ts
+│       └── package.json
+├── turbo.json
+└── package.json
+```
+
+### 8. Antigravity Keyboard Shortcuts
+
+Useful shortcuts when working on components:
+
+- **Cmd/Ctrl + P**: Quick file navigation to component files
+- **Cmd/Ctrl + Shift + F**: Search across all component files
+- **F12**: Go to definition (jump to variant definitions)
+- **Shift + F12**: Find all references (see where component is used)
+- **Cmd/Ctrl + .**: Quick fix suggestions
+
+### 9. Git Workflow in Antigravity
+
+```bash
+# Create feature branch for new component
+git checkout -b feat/add-accordion-component
+
+# Make changes following guidelines
+# ...
+
+# Commit with conventional commits
+git commit -m "feat(ui): add Accordion compound component
+
+- Add Accordion, AccordionItem, AccordionTrigger, AccordionContent
+- Use tailwind-variants with slots
+- Include size and variant options
+- Add Storybook stories
+- Add Playwright tests"
+
+# Push and create PR
+git push origin feat/add-accordion-component
+```
 
 ---
 
@@ -34,12 +476,10 @@ packages/
           index.ts
         [ComponentName]/
           ...
-      tokens/
-        colors.ts
-        spacing.ts
-        typography.ts
+      styles/
+        main.css
       utils/
-        cn.ts (classnames utility)
+        utils.ts (Compound component helpers)
     package.json
 ```
 
@@ -1033,132 +1473,45 @@ test.describe('Complex Compositions', () => {
 
 ---
 
-## Design Tokens
+### 1. Global Styles & Theme
 
-### 1. Color Tokens
+The project uses **Tailwind CSS v4**. Global styles and theme variables are defined in:
 
-Define semantic color tokens in `tokens/colors.ts`:
+`packages/ui/src/styles/main.css`
 
-```typescript
-export const colors = {
-  // Brand colors
-  primary: {
-    50: '#eff6ff',
-    100: '#dbeafe',
-    200: '#bfdbfe',
-    300: '#93c5fd',
-    400: '#60a5fa',
-    500: '#3b82f6',
-    600: '#2563eb',
-    700: '#1d4ed8',
-    800: '#1e40af',
-    900: '#1e3a8a',
-  },
-  
-  // Semantic colors
-  success: {
-    light: '#10b981',
-    DEFAULT: '#059669',
-    dark: '#047857',
-  },
-  warning: {
-    light: '#f59e0b',
-    DEFAULT: '#d97706',
-    dark: '#b45309',
-  },
-  error: {
-    light: '#ef4444',
-    DEFAULT: '#dc2626',
-    dark: '#b91c1c',
-  },
-  info: {
-    light: '#3b82f6',
-    DEFAULT: '#2563eb',
-    dark: '#1d4ed8',
-  },
-  
-  // Neutral colors
-  gray: {
-    50: '#f9fafb',
-    100: '#f3f4f6',
-    200: '#e5e7eb',
-    300: '#d1d5db',
-    400: '#9ca3af',
-    500: '#6b7280',
-    600: '#4b5563',
-    700: '#374151',
-    800: '#1f2937',
-    900: '#111827',
-    950: '#030712',
-  },
-};
+```css
+@import 'tailwindcss';
+
+:root,
+html[data-theme='light'] {
+  @apply text-gray-800;
+}
+
+@theme {
+  --color-background: rgba(255, 255, 255, 1);
+}
+
+:root,
+html[data-theme='light'] {
+  --color-background: rgba(255, 255, 255, 1);
+}
+
+:root,
+html[data-theme='dark'] {
+  --color-background: rgba(0, 0, 0, 1);
+}
 ```
 
-### 2. Spacing Tokens
+### 2. Using Tokens in Tailwind-Variants
 
-```typescript
-export const spacing = {
-  0: '0',
-  1: '0.25rem',  // 4px
-  2: '0.5rem',   // 8px
-  3: '0.75rem',  // 12px
-  4: '1rem',     // 16px
-  5: '1.25rem',  // 20px
-  6: '1.5rem',   // 24px
-  8: '2rem',     // 32px
-  10: '2.5rem',  // 40px
-  12: '3rem',    // 48px
-  16: '4rem',    // 64px
-  20: '5rem',    // 80px
-  24: '6rem',    // 96px
-};
-```
-
-### 3. Typography Tokens
-
-```typescript
-export const typography = {
-  fontFamily: {
-    sans: ['Inter', 'system-ui', 'sans-serif'],
-    mono: ['Fira Code', 'Menlo', 'monospace'],
-  },
-  fontSize: {
-    xs: ['0.75rem', { lineHeight: '1rem' }],      // 12px
-    sm: ['0.875rem', { lineHeight: '1.25rem' }],  // 14px
-    base: ['1rem', { lineHeight: '1.5rem' }],     // 16px
-    lg: ['1.125rem', { lineHeight: '1.75rem' }],  // 18px
-    xl: ['1.25rem', { lineHeight: '1.75rem' }],   // 20px
-    '2xl': ['1.5rem', { lineHeight: '2rem' }],    // 24px
-    '3xl': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
-    '4xl': ['2.25rem', { lineHeight: '2.5rem' }],   // 36px
-  },
-  fontWeight: {
-    normal: '400',
-    medium: '500',
-    semibold: '600',
-    bold: '700',
-  },
-};
-```
-
-### 4. Using Tokens in Tailwind-Variants
+Use the standard Tailwind classes or the defined CSS variables in your variants.
 
 ```tsx
-// Instead of hardcoded values
-const badVariants = tv({
-  base: 'px-4 py-2 text-base bg-blue-600',
-});
+import { tv } from 'tailwind-variants';
 
-// Use Tailwind's design tokens
-const goodVariants = tv({
-  base: 'px-4 py-2 text-base bg-primary-600',
-  variants: {
-    size: {
-      sm: 'px-3 py-1.5 text-sm',   // Uses spacing and typography tokens
-      md: 'px-4 py-2 text-base',
-      lg: 'px-6 py-3 text-lg',
-    },
-  },
+export const componentVariants = tv({
+  base: 'bg-[var(--color-background)] text-gray-800',
+  // ...
 });
 ```
 

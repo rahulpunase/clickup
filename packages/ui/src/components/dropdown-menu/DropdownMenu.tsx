@@ -1,93 +1,109 @@
 import { Menu } from '@base-ui/react/menu';
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps, ComponentPropsWithoutRef } from 'react';
+import { VariantProps } from 'tailwind-variants';
 
-import { extractChildren } from '../../utils/utils';
-import Heading from '../typography/Heading';
+import { dropdownMenuVariants } from './DropdownMenu.variants';
 import { Item, SubmenuItem } from './Item';
 
-const DropdownRoot = ({ children }: { children: React.ReactNode }) => {
+const DropdownMenuRoot = ({ children }: { children: React.ReactNode }) => {
   return <Menu.Root>{children}</Menu.Root>;
 };
 
-const Separator = () => {
-  return <Menu.Separator className="my-1 border-t border-gray-200" />;
+const Separator = ({
+  className,
+  ...props
+}: ComponentProps<typeof Menu.Separator> & { className?: string }) => {
+  const { separator } = dropdownMenuVariants();
+  return <Menu.Separator className={separator({ className })} {...props} />;
 };
 
 const Submenu = Menu.SubmenuRoot;
 
-type TriggerType = {
+type TriggerProps = ComponentPropsWithoutRef<typeof Menu.Trigger> & {
   children: React.ReactElement;
-} & ComponentProps<typeof Menu.Trigger>;
-
-const Trigger = ({ children, ...props }: TriggerType) => {
-  return (
-    <Menu.Trigger
-      {...props}
-      render={(props) => React.cloneElement(children, props)}
-    />
-  );
+  className?: string; // Explicitly override className
 };
 
-const Footer = ({ children }: { children: React.ReactNode }) => {
-  return <div className="p-2 pt-2 pb-0">{children}</div>;
-};
-
-const Header = ({
-  children,
-  heading,
-}: {
-  children?: React.ReactNode;
-  heading?: string;
-}) => {
-  if (heading) {
+const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
+  ({ children, className, ...props }, ref) => {
     return (
-      <div className="pt-0 pb-2">
-        <Heading size="h6" weight="medium">
-          {heading}
-        </Heading>
+      <Menu.Trigger
+        ref={ref}
+        className={className}
+        {...props}
+        render={(props) => React.cloneElement(children, props)}
+      />
+    );
+  },
+);
+Trigger.displayName = 'DropdownMenu.Trigger';
+
+type FooterProps = React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof dropdownMenuVariants>;
+
+const Footer = React.forwardRef<HTMLDivElement, FooterProps>(
+  ({ children, className, ...props }, ref) => {
+    const { footer } = dropdownMenuVariants();
+    return (
+      <div ref={ref} className={footer({ className })} {...props}>
+        {children}
       </div>
     );
-  }
-  return <div className="p-2 pt-2 pb-0">{children}</div>;
-};
+  },
+);
+Footer.displayName = 'DropdownMenu.Footer';
 
-type ContentProps = {
-  children: React.ReactNode;
-} & ComponentProps<typeof Menu.Positioner>;
+type HeaderProps = React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof dropdownMenuVariants> & {
+    heading?: string;
+  };
 
-const Content = ({ children, sideOffset = 8, ...props }: ContentProps) => {
-  const { footer, header, remaining } = extractChildren(children, {
-    footer: Footer,
-    header: Header,
-  });
-  return (
-    <Menu.Portal>
-      <Menu.Positioner
-        {...props}
-        sideOffset={sideOffset}
-        className="bg-background rounded-md shadow-lg py-2 px-1 border border-gray-200 max-w-72 "
-      >
-        <Menu.Popup>
-          {header && <div className="pr-2 pl-2">{header}</div>}
-          <div className="pr-1 pl-1">{remaining}</div>
-          {footer && (
-            <div className="mt-2 border-t border-gray-200">{footer}</div>
-          )}
-        </Menu.Popup>
-      </Menu.Positioner>
-    </Menu.Portal>
-  );
-};
+const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
+  ({ children, heading, className, ...props }, ref) => {
+    const { header } = dropdownMenuVariants();
+    return (
+      <div ref={ref} className={header({ className })} {...props}>
+        {heading || children}
+      </div>
+    );
+  },
+);
+Header.displayName = 'DropdownMenu.Header';
 
-const Dropdown = Object.assign(DropdownRoot, {
+type ContentProps = Omit<
+  ComponentPropsWithoutRef<typeof Menu.Positioner>,
+  'className'
+> &
+  VariantProps<typeof dropdownMenuVariants> & { className?: string };
+
+const Content = React.forwardRef<HTMLDivElement, ContentProps>(
+  ({ children, sideOffset = 8, className, ...props }, ref) => {
+    const { menu } = dropdownMenuVariants();
+    return (
+      <Menu.Portal>
+        <Menu.Positioner
+          ref={ref}
+          sideOffset={sideOffset}
+          className={menu({ className })}
+          {...props}
+        >
+          <Menu.Popup>{children}</Menu.Popup>
+        </Menu.Positioner>
+      </Menu.Portal>
+    );
+  },
+);
+Content.displayName = 'DropdownMenu.Content';
+
+const DropdownMenu = Object.assign(DropdownMenuRoot, {
   Trigger,
   Content,
   Footer,
   Separator,
   Header,
-  Item: Item,
+  Item,
   Submenu,
-  SubmenuItem: SubmenuItem,
+  SubmenuItem,
 });
 
-export { Dropdown };
+export { DropdownMenu };

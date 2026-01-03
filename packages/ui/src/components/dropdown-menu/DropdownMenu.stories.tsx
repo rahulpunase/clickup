@@ -3,12 +3,12 @@ import { ComponentProps } from 'react';
 
 import { Button } from '../button';
 import { ButtonGroup } from '../button-group/ButtonGroup';
-import { Dropdown } from '../dropdown-menu/DropdownMenu';
+import { DropdownMenu } from './DropdownMenu';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
   title: 'Components/Dropdown Menu',
-  component: Dropdown,
+  component: DropdownMenu,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered',
@@ -19,87 +19,100 @@ const meta = {
   argTypes: {},
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
   args: {},
-} satisfies Meta<typeof Dropdown>;
+} satisfies Meta<typeof DropdownMenu>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Primary: Story = {
-  render: (args) => (
+  args: { children: null },
+  render: () => (
     <div className="flex items-center justify-center">
-      <Dropdown>
-        <Dropdown.Trigger>
+      <DropdownMenu>
+        <DropdownMenu.Trigger>
           <Button>Open</Button>
-        </Dropdown.Trigger>
-        <Dropdown.Content>
-          <Dropdown.Item icon="plus">
-            <Dropdown.Item.Label>Add</Dropdown.Item.Label>
-          </Dropdown.Item>
-          <Dropdown.Item icon="circle-arrow-out-down-right">
-            <Dropdown.Item.Label>Move</Dropdown.Item.Label>
-            <Dropdown.Item.SubLabel>
-              Move to another list
-            </Dropdown.Item.SubLabel>
-          </Dropdown.Item>
-          <Dropdown.Item variant="danger" icon="trash">
-            <Dropdown.Item.Label>Remove</Dropdown.Item.Label>
-          </Dropdown.Item>
-          <Dropdown.Separator />
-          <Dropdown.Item disabled icon="circle-arrow-out-down-right">
-            <Dropdown.Item.Label>Move</Dropdown.Item.Label>
-            <Dropdown.Item.SubLabel>
-              Move to another list
-            </Dropdown.Item.SubLabel>
-          </Dropdown.Item>
-          <Dropdown.Footer>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item icon="plus">
+            <DropdownMenu.Item.Label>Add</DropdownMenu.Item.Label>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item icon="circle-arrow-out-down-right">
+            <div className="flex flex-col">
+              <DropdownMenu.Item.Label>Move</DropdownMenu.Item.Label>
+              <DropdownMenu.Item.SubLabel>
+                Move to another list
+              </DropdownMenu.Item.SubLabel>
+            </div>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item variant="danger" icon="trash">
+            <DropdownMenu.Item.Label>Remove</DropdownMenu.Item.Label>
+          </DropdownMenu.Item>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Item disabled icon="circle-arrow-out-down-right">
+            <div className="flex flex-col">
+              <DropdownMenu.Item.Label>Move</DropdownMenu.Item.Label>
+              <DropdownMenu.Item.SubLabel>
+                Move to another list
+              </DropdownMenu.Item.SubLabel>
+            </div>
+          </DropdownMenu.Item>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Footer>
             <Button size="sm">Create</Button>
-          </Dropdown.Footer>
-        </Dropdown.Content>
-      </Dropdown>
+          </DropdownMenu.Footer>
+        </DropdownMenu.Content>
+      </DropdownMenu>
     </div>
   ),
 };
 
 export const WithButtonGroup: Story = {
-  render: (args) => (
+  args: { children: null },
+  render: () => (
     <div className="flex items-center justify-center">
       <ButtonGroup size="md">
         <Button>Create</Button>
-        <Dropdown>
-          <Dropdown.Trigger>
+        <DropdownMenu>
+          <DropdownMenu.Trigger>
             <Button icon="ellipsis-vertical" />
-          </Dropdown.Trigger>
-          <Dropdown.Content>
-            <Dropdown.Header heading="Dropdown Menu" />
-            <Dropdown.Item icon="plus">
-              <Dropdown.Item.Label>Add</Dropdown.Item.Label>
-            </Dropdown.Item>
-            <Dropdown.Item icon="circle-arrow-out-down-right">
-              <Dropdown.Item.Label>Move</Dropdown.Item.Label>
-              <Dropdown.Item.SubLabel>
-                Move to another list
-              </Dropdown.Item.SubLabel>
-            </Dropdown.Item>
-            <Dropdown.Item variant="danger" icon="trash">
-              <Dropdown.Item.Label>Remove</Dropdown.Item.Label>
-            </Dropdown.Item>
-            <Dropdown.Item disabled icon="circle-arrow-out-down-right">
-              <Dropdown.Item.Label>Disabled</Dropdown.Item.Label>
-              <Dropdown.Item.SubLabel>
-                This item is completely disabled
-              </Dropdown.Item.SubLabel>
-            </Dropdown.Item>
-            <Dropdown.Footer>
-              <ButtonGroup size="sm">
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            <DropdownMenu.Header heading="Dropdown Menu" />
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item icon="plus">
+              <DropdownMenu.Item.Label>Add</DropdownMenu.Item.Label>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item icon="circle-arrow-out-down-right">
+              <div className="flex flex-col">
+                <DropdownMenu.Item.Label>Move</DropdownMenu.Item.Label>
+                <DropdownMenu.Item.SubLabel>
+                  Move to another list
+                </DropdownMenu.Item.SubLabel>
+              </div>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item variant="danger" icon="trash">
+              <DropdownMenu.Item.Label>Remove</DropdownMenu.Item.Label>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item disabled icon="circle-arrow-out-down-right">
+              <div className="flex flex-col">
+                <DropdownMenu.Item.Label>Disabled</DropdownMenu.Item.Label>
+                <DropdownMenu.Item.SubLabel>
+                  This item is completely disabled
+                </DropdownMenu.Item.SubLabel>
+              </div>
+            </DropdownMenu.Item>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Footer>
+              <div className="flex gap-2">
                 <Button size="sm">Create</Button>
-                <Button size="sm" color="danger">
+                <Button size="sm" color="secondary">
                   Cancel
                 </Button>
-              </ButtonGroup>
-            </Dropdown.Footer>
-          </Dropdown.Content>
-        </Dropdown>
+              </div>
+            </DropdownMenu.Footer>
+          </DropdownMenu.Content>
+        </DropdownMenu>
       </ButtonGroup>
     </div>
   ),
@@ -108,38 +121,39 @@ export const WithButtonGroup: Story = {
 const AlignedDropdown = ({
   align,
 }: {
-  align: ComponentProps<typeof Dropdown.Content>['align'];
+  align: ComponentProps<typeof DropdownMenu.Content>['align'];
 }) => {
   return (
-    <Dropdown>
-      <Dropdown.Trigger>
+    <DropdownMenu>
+      <DropdownMenu.Trigger>
         <Button>{align}</Button>
-      </Dropdown.Trigger>
-      <Dropdown.Content align={align}>
-        <Dropdown.Item icon="plus">
-          <Dropdown.Item.Label>Add</Dropdown.Item.Label>
-        </Dropdown.Item>
-        <Dropdown.Item icon="circle-arrow-out-down-right">
-          <Dropdown.Item.Label>Move</Dropdown.Item.Label>
-          <Dropdown.Item.SubLabel>Move to another list</Dropdown.Item.SubLabel>
-        </Dropdown.Item>
-        <Dropdown.Item variant="danger" icon="trash">
-          <Dropdown.Item.Label>Remove</Dropdown.Item.Label>
-        </Dropdown.Item>
-        <Dropdown.Item disabled icon="circle-arrow-out-down-right">
-          <Dropdown.Item.Label>Move</Dropdown.Item.Label>
-          <Dropdown.Item.SubLabel>Move to another list</Dropdown.Item.SubLabel>
-        </Dropdown.Item>
-        <Dropdown.Footer>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content align={align}>
+        <DropdownMenu.Item icon="plus">
+          <DropdownMenu.Item.Label>Add</DropdownMenu.Item.Label>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item icon="circle-arrow-out-down-right">
+          <div className="flex flex-col">
+            <DropdownMenu.Item.Label>Move</DropdownMenu.Item.Label>
+            <DropdownMenu.Item.SubLabel>
+              Move to another list
+            </DropdownMenu.Item.SubLabel>
+          </div>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item variant="danger" icon="trash">
+          <DropdownMenu.Item.Label>Remove</DropdownMenu.Item.Label>
+        </DropdownMenu.Item>
+        <DropdownMenu.Footer>
           <Button size="sm">Create</Button>
-        </Dropdown.Footer>
-      </Dropdown.Content>
-    </Dropdown>
+        </DropdownMenu.Footer>
+      </DropdownMenu.Content>
+    </DropdownMenu>
   );
 };
 
 export const Alignment: Story = {
-  render: (args) => (
+  args: { children: null },
+  render: () => (
     <div className="flex items-center justify-center gap-4">
       <AlignedDropdown align="start" />
       <AlignedDropdown align="end" />
@@ -148,56 +162,50 @@ export const Alignment: Story = {
 };
 
 export const WithSubmenu: Story = {
-  render: (args) => (
+  args: { children: null },
+  render: () => (
     <div>
-      <Dropdown>
-        <Dropdown.Trigger>
+      <DropdownMenu>
+        <DropdownMenu.Trigger>
           <Button>Open</Button>
-        </Dropdown.Trigger>
-        <Dropdown.Content>
-          <Dropdown.Item icon="plus">
-            <Dropdown.Item.Label>Add</Dropdown.Item.Label>
-          </Dropdown.Item>
-          <Dropdown.Item icon="circle-arrow-out-down-right">
-            <Dropdown.Item.Label>Move</Dropdown.Item.Label>
-            <Dropdown.Item.SubLabel>
-              Move to another list
-            </Dropdown.Item.SubLabel>
-          </Dropdown.Item>
-          <Dropdown.Item variant="danger" icon="trash">
-            <Dropdown.Item.Label>Remove</Dropdown.Item.Label>
-          </Dropdown.Item>
-          <Dropdown.Separator />
-          <Dropdown.Submenu>
-            <Dropdown.SubmenuItem>
-              <Dropdown.Item.Label>Submenu</Dropdown.Item.Label>
-            </Dropdown.SubmenuItem>
-            <Dropdown.Content>
-              <Dropdown.Item icon="plus">
-                <Dropdown.Item.Label>Add</Dropdown.Item.Label>
-              </Dropdown.Item>
-              <Dropdown.Item icon="circle-arrow-out-down-right">
-                <Dropdown.Item.Label>Move</Dropdown.Item.Label>
-                <Dropdown.Item.SubLabel>
-                  Move to another list
-                </Dropdown.Item.SubLabel>
-              </Dropdown.Item>
-              <Dropdown.Item variant="danger" icon="trash">
-                <Dropdown.Item.Label>Remove</Dropdown.Item.Label>
-              </Dropdown.Item>
-              <Dropdown.Item disabled icon="circle-arrow-out-down-right">
-                <Dropdown.Item.Label>Move</Dropdown.Item.Label>
-                <Dropdown.Item.SubLabel>
-                  Move to another list
-                </Dropdown.Item.SubLabel>
-              </Dropdown.Item>
-            </Dropdown.Content>
-          </Dropdown.Submenu>
-          <Dropdown.Footer>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item icon="plus">
+            <DropdownMenu.Item.Label>Add</DropdownMenu.Item.Label>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item icon="circle-arrow-out-down-right">
+            <div className="flex flex-col">
+              <DropdownMenu.Item.Label>Move</DropdownMenu.Item.Label>
+              <DropdownMenu.Item.SubLabel>
+                Move to another list
+              </DropdownMenu.Item.SubLabel>
+            </div>
+          </DropdownMenu.Item>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Submenu>
+            <DropdownMenu.SubmenuItem icon="user">
+              <DropdownMenu.Item.Label>Submenu</DropdownMenu.Item.Label>
+            </DropdownMenu.SubmenuItem>
+            <DropdownMenu.Content>
+              <DropdownMenu.Item icon="plus">
+                <DropdownMenu.Item.Label>Add</DropdownMenu.Item.Label>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item icon="circle-arrow-out-down-right">
+                <div className="flex flex-col">
+                  <DropdownMenu.Item.Label>Move</DropdownMenu.Item.Label>
+                  <DropdownMenu.Item.SubLabel>
+                    Move to another list
+                  </DropdownMenu.Item.SubLabel>
+                </div>
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Submenu>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Footer>
             <Button size="sm">Create</Button>
-          </Dropdown.Footer>
-        </Dropdown.Content>
-      </Dropdown>
+          </DropdownMenu.Footer>
+        </DropdownMenu.Content>
+      </DropdownMenu>
     </div>
   ),
 };

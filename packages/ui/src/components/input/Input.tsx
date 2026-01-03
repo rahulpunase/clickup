@@ -6,33 +6,12 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import { cn, cx, tv, VariantProps } from 'tailwind-variants';
+import { cn, VariantProps } from 'tailwind-variants';
 
-import { colors } from '../../utils/colors';
 import { extractChildrenOfType } from '../../utils/utils';
 import { Icon } from '../icon/Icon';
 import styles from './Input.module.css';
-
-const inputVariants = tv({
-  base: cx(
-    'flex items-center gap-2 rounded-md text-sm w-full',
-    'outline:outline-1 outline-blue-300 outline-offset-2',
-  ),
-  variants: {
-    variant: {
-      default: `border ${colors.border.main}`,
-      plain: '',
-    },
-    size: {
-      md: 'p-2',
-      sm: 'p-1',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-    size: 'md',
-  },
-});
+import { inputVariants } from './Input.variants';
 
 type InputProps = {
   icon?: ComponentProps<typeof DynamicIcon>['name'];

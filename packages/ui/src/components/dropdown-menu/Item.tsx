@@ -1,109 +1,110 @@
 import { Menu } from '@base-ui/react/menu';
-import { DynamicIcon } from 'lucide-react/dynamic';
-import React, { ComponentProps } from 'react';
-import { cn } from 'tailwind-variants';
+import { type IconName } from 'lucide-react/dynamic';
+import React, { ComponentPropsWithoutRef } from 'react';
+import { VariantProps } from 'tailwind-variants';
 
-import { extractChildrenOfType } from '../../utils/utils';
 import { Icon } from '../icon/Icon';
-import { itemVariants } from './variants';
+import { dropdownMenuVariants } from './DropdownMenu.variants';
 
-export type ItemProps<T extends ComponentProps<typeof Menu.Item>> = {
+type ItemVariantProps = VariantProps<typeof dropdownMenuVariants>;
+
+export type ItemProps = Omit<
+  ComponentPropsWithoutRef<typeof Menu.Item>,
+  'className'
+> & {
   children: React.ReactNode;
-  icon?: ComponentProps<typeof DynamicIcon>['name'];
-  variant?: 'default' | 'danger';
-  disabled?: boolean;
-} & T;
-
-const Label = ({ children }: { children: React.ReactNode }) => {
-  return <span className="text-sm">{children}</span>;
+  icon?: IconName;
+  variant?: ItemVariantProps['variant'];
+  className?: string;
 };
 
-const SubLabel = ({ children }: { children: React.ReactNode }) => {
-  return <span className="text-xs text-gray-500">{children}</span>;
-};
-
-const RootItem = <T extends ComponentProps<typeof Menu.Item>>({
+const Label = ({
   children,
-  icon,
-  variant,
-  disabled,
+  className,
   ...props
-}: ItemProps<T>) => {
-  const { label, subLabel } = extractChildrenOfType(children, {
-    label: Label,
-    subLabel: SubLabel,
-  });
+}: React.HTMLAttributes<HTMLSpanElement>) => {
+  const { label } = dropdownMenuVariants();
   return (
-    <Menu.Item
-      className={cn(
-        itemVariants({ variant }),
-        {
-          'cursor-not-allowed opacity-50': disabled,
-        },
-        'outline:outline-1 outline-blue-300 outline-offset-2',
-      )}
-      {...props}
-    >
-      {icon && <Icon icon={icon} size="md" />}
-      <div className="flex flex-col">
-        {label}
-        {subLabel}
-      </div>
-    </Menu.Item>
+    <span className={label({ className })} {...props}>
+      {children}
+    </span>
   );
 };
 
-export type SubmenuItemProps = {
-  children: React.ReactNode;
-  icon?: ComponentProps<typeof DynamicIcon>['name'];
-  variant?: 'default' | 'danger';
-  disabled?: boolean;
-} & ComponentProps<typeof Menu.SubmenuTrigger>;
-
-const SubmenuTrigger = ({
+const SubLabel = ({
   children,
-  icon,
-  variant,
-  disabled,
+  className,
   ...props
-}: SubmenuItemProps) => {
-  const { label, subLabel } = extractChildrenOfType(children, {
-    label: Label,
-    subLabel: SubLabel,
-  });
+}: React.HTMLAttributes<HTMLSpanElement>) => {
+  const { subLabel } = dropdownMenuVariants();
   return (
-    <Menu.SubmenuTrigger
-      className={cn(
-        itemVariants({ variant }),
-        {
-          'cursor-not-allowed opacity-50': disabled,
-        },
-        'outline:outline-1 outline-blue-300 outline-offset-2',
-      )}
-      {...props}
-    >
-      {icon && <Icon icon={icon} size="md" />}
-      <div className="flex flex-col">
-        {label}
-        {subLabel}
-      </div>
-      <div className="ml-auto">
-        <Icon icon="chevron-right" size="md" />
-      </div>
-    </Menu.SubmenuTrigger>
+    <span className={subLabel({ className })} {...props}>
+      {children}
+    </span>
   );
 };
 
-const Item = Object.assign(RootItem, {
-  displayName: 'Dropdown.Item',
+const RootItem = React.forwardRef<HTMLDivElement, ItemProps>(
+  ({ children, icon, variant, className, disabled, ...props }, ref) => {
+    const { item, icon: iconClass } = dropdownMenuVariants({ variant });
+    return (
+      <Menu.Item
+        ref={ref}
+        className={item({ className })}
+        disabled={disabled}
+        {...props}
+      >
+        {icon && <Icon icon={icon} className={iconClass()} />}
+        {children}
+      </Menu.Item>
+    );
+  },
+);
+RootItem.displayName = 'DropdownMenu.Item';
+
+export type SubmenuItemProps = Omit<
+  ComponentPropsWithoutRef<typeof Menu.SubmenuTrigger>,
+  'className'
+> & {
+  children: React.ReactNode;
+  icon?: IconName;
+  variant?: ItemVariantProps['variant'];
+  className?: string;
+};
+
+const SubmenuTrigger = React.forwardRef<HTMLDivElement, SubmenuItemProps>(
+  ({ children, icon, variant, className = '', disabled, ...props }, ref) => {
+    const {
+      item,
+      icon: iconClass,
+      submenuTrigger,
+    } = dropdownMenuVariants({
+      variant,
+    });
+    return (
+      <Menu.SubmenuTrigger
+        ref={ref}
+        className={item({ className, class: submenuTrigger() }) as any}
+        disabled={disabled}
+        {...props}
+      >
+        <div className="flex items-center gap-2 flex-1">
+          {icon && <Icon icon={icon} className={iconClass()} />}
+          {children}
+        </div>
+        <Icon icon="chevron-right" className={iconClass()} />
+      </Menu.SubmenuTrigger>
+    );
+  },
+);
+SubmenuTrigger.displayName = 'DropdownMenu.SubmenuItem';
+
+export const Item = Object.assign(RootItem, {
   Label,
   SubLabel,
 });
 
-const SubmenuItem = Object.assign(SubmenuTrigger, {
-  displayName: 'Dropdown.Submenu',
+export const SubmenuItem = Object.assign(SubmenuTrigger, {
   Label,
   SubLabel,
 });
-
-export { Item, SubmenuItem };
