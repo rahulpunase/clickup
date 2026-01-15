@@ -53,6 +53,9 @@ Create Storybook stories for the Card component following the guidelines:
 - Complex composition with nested components
 ```
 
+#### To use icons in the component
+- Use Icon component (packages/ui/src/components/icon)
+
 #### Writing Playwright Tests
 
 **Prompt Example:**

@@ -3,12 +3,10 @@ import { cx, tv } from 'tailwind-variants';
 const buttonVariant = tv({
   base: cx(
     // base
-    'rounded-2xl px-3 text-sm flex items-center justify-center cursor-pointer box-border',
-    'transition-all duration-100 ease-in-out',
+    'rounded-2xl px-4 text-sm flex items-center justify-center cursor-pointer box-border',
+    'transition-colors duration-100 ease-in-out',
     // disabled
     'disabled:opacity-50 disabled:cursor-not-allowed',
-    // aria-expanded
-    'aria-expanded:bg-blue-600',
     // outline
     'outline:outline-1 outline-blue-300 outline-offset-2',
   ),
@@ -39,13 +37,13 @@ const buttonVariant = tv({
       variant: 'solid',
       color: 'primary',
       className:
-        'bg-blue-500 text-white hover:bg-blue-600 border-blue-500 hover:border-blue-600',
+        'bg-primary text-white hover:bg-primary-dark border-primary hover:border-primary-dark',
     },
     {
       variant: 'solid',
       color: 'secondary',
       className:
-        'bg-gray-200 text-gray-800 hover:bg-gray-300 border-gray-400 hover:border-gray-400',
+        'bg-secondary hover:bg-secondary-dark border-secondary hover:border-secondary-hover',
     },
     {
       variant: 'solid',
@@ -70,13 +68,13 @@ const buttonVariant = tv({
       variant: 'outline',
       color: 'primary',
       className:
-        'text-blue-500 border-blue-500 hover:border-blue-600 hover:text-blue-600',
+        'text-primary border-primary hover:border-primary-dark hover:text-primary-hover hover:bg-primary-lightest',
     },
     {
       variant: 'outline',
       color: 'secondary',
       className:
-        'text-gray-700 border-gray-400 hover:border-gray-500 hover:text-gray-800',
+        'text-gray-700 border-secondary hover:border-secondary-dark hover:text-gray-800 hover:bg-secondary-lightest',
     },
     {
       variant: 'outline',
@@ -100,8 +98,7 @@ const buttonVariant = tv({
     {
       variant: 'ghost',
       color: 'primary',
-      className:
-        'text-blue-500 border-blue-500 hover:border-blue-600 hover:bg-blue-50',
+      className: 'text-primary border-primary hover:bg-primary-lightest',
     },
     {
       variant: 'ghost',
@@ -131,12 +128,12 @@ const buttonVariant = tv({
     {
       variant: 'link',
       color: 'primary',
-      className: 'text-blue-500 hover:text-blue-600',
+      className: 'text-primary hover:text-primary-hover',
     },
     {
       variant: 'link',
       color: 'secondary',
-      className: 'text-gray-700 hover:text-gray-800',
+      className: '',
     },
     {
       variant: 'link',

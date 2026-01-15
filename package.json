@@ -10,10 +10,12 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.8",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "prettier": "^3.7.4",
     "turbo": "^2.7.1",
-    "typescript": "5.9.2",
-    "eslint-plugin-simple-import-sort": "^12.1.1"
+    "typescript": "5.9.2"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
