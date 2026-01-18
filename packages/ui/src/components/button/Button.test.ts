@@ -1,8 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const storybookPath = (id: string) => {
-  return '/iframe.html?id=' + id + '&viewMode=story';
-};
+import { storybookPath } from '../../utils/utils';
 
 test.describe('Button', () => {
   test(': Primary', async ({ page }) => {

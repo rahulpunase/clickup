@@ -51,3 +51,7 @@ export const extractChildren = <T extends Record<string, React.ElementType>>(
   );
   return { ...extracted, remaining };
 };
+
+export function storybookPath(id: string) {
+  return '/iframe.html?id=' + id + '&viewMode=story';
+}

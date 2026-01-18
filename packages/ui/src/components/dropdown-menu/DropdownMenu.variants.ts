@@ -10,11 +10,11 @@ export const dropdownMenuVariants = tv({
       'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
     ],
     item: [
-      'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors',
+      'relative flex cursor-default select-none items-center gap-2 rounded-sm px-1 py-1 cursor-pointer text-sm outline-none transition-colors',
       'focus:bg-background-hover focus:text-gray-900',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     ],
-    label: 'flex-1 text-sm font-medium',
+    label: 'flex-1 text-sm font-normal',
     subLabel: 'text-xs text-gray-500',
     separator: '-mx-1 my-1 h-px bg-stroke-main',
     header: 'px-2 py-1.5 text-sm font-semibold',
